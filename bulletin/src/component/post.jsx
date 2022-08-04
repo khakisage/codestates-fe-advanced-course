@@ -1,13 +1,19 @@
 import React, { useState, useEffect } from "react";
 import styled from "styled-components";
 import ModalComponent from "../Modal/ModalComponent";
+import Pagination from "./pagination";
 
 function Posts() {
   const [posts, setPosts] = useState([]);
   const [showModal, setShowModal] = useState("");
+  const limit = 10;
+  const [page, setPage] = useState(1);
+  const offset = (page - 1) * limit;
+
   const onModalHandler = id => {
     setShowModal(id);
   };
+
 
   useEffect(() => {
     fetch("https://jsonplaceholder.typicode.com/posts")
@@ -22,12 +28,13 @@ function Posts() {
           <h1>Bulletin Board</h1>
         </Header>
         <Main>
-          {posts.map((item) => (
+          {posts.slice(offset, offset + limit).map((item) => (
             <Article key={item.id}>
               <Title>
                 <h4>
-                  {item.title} <button onClick={() => onModalHandler(item.id)}>more</button>
+                  {item.title} 
                 </h4>
+                <button onClick={() => onModalHandler(item.id)}>more</button>
                 <ModalComponent id={item.id} user={item.userId} showModal={showModal} setShowModal={setShowModal} title={item.title} body={item.body}/>
               </Title>
               <User>
@@ -38,6 +45,14 @@ function Posts() {
             </Article>
           ))}
         </Main>
+        <footer>
+          <Pagination
+            total={posts.length}
+            limit={limit}
+            page={page}
+            setPage={setPage}
+          />
+        </footer>
       </Layout>
     </>
   )
@@ -68,7 +83,8 @@ const Main = styled.main`
   display: flex;
   flex-direction: column;
   align-items: center;
-  padding-top: 3vh;
+  padding-top: 1vh;
+  height: 80vh;
   @media screen and (max-width: 670px) {
     h4 { font-size: 7px }
   }
@@ -80,7 +96,9 @@ const Article = styled.article`
   align-items: center;
   border-bottom: solid 1px gray;
   width: 80vw;
+  height: 7.7vh;
   justify-content: space-between;
+  
 `
 
 const Title = styled.div`
@@ -100,7 +118,7 @@ width: 75vw;
 `
 
 const User = styled.div`
-  font-size: 1em;
+  font-size: 0.8em;
 `
 
 export default Posts;
