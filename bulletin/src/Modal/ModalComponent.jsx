@@ -26,6 +26,7 @@ export default function ModalComponent({id, showModal, setShowModal, title, body
         <main>
           <Body><h3>{body}</h3></Body>
           <Writer><h4>작성자 {user}</h4></Writer>
+          <h4>{post.length} comments</h4>
           {post.map((item, index) => (
             <article key={index}>
               <h5>
@@ -43,14 +44,15 @@ export default function ModalComponent({id, showModal, setShowModal, title, body
 }
 
 const Body = styled.div`
-  width: 80%;
+  width: 100%;
   height: auto;
   justify-content: center;
+  border-bottom: 1px solid black;
 `
 const Writer = styled.div`
   display: flex;
   width: 100%;
   height: auto;
   flex-direction: row-reverse;
-  border-bottom: 1px solid black;
+  
 `
